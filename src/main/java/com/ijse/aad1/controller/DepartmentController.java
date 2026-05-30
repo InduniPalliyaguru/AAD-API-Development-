@@ -35,4 +35,13 @@ public class DepartmentController {
         List<DepartmentDTO> departmentDTOList = departmentService.getDepartments();
         return departmentDTOList;
     }
+
+    @GetMapping (value = "/{departmentId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    // http://localhost:8080/v1/departments/{departmentId} - GET request to retrieve a specific department by its ID and specify that the response will be in JSON format
+    public DepartmentDTO getDepartmentDetails(@PathVariable long departmentId) {
+        // method to handle GET requests to retrieve a specific department by its ID.
+        // It calls the getDepartmentDetail method of the DepartmentService and returns the DepartmentDTO for the specified department ID.
+        DepartmentDTO departmentDTO = departmentService.getDepartmentDetail(departmentId);
+        return departmentDTO;
+    }
 }

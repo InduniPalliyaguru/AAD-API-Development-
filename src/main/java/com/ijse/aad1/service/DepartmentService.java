@@ -9,4 +9,6 @@ public interface DepartmentService {
     DepartmentDTO saveDepartment(DepartmentDTO departmentDTO);
 
     List<DepartmentDTO> getDepartments();
+
+    DepartmentDTO getDepartmentDetail(long departmentId);
 }

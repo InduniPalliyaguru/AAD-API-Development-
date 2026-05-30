@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -70,6 +71,38 @@ public class DepartmentServiceImpl implements DepartmentService {
             log.info("Error occurred while fetching departments: " + e.getMessage());
             // In case of any exceptions during the retrieval of departments, log the error message
             // and rethrow the exception to be handled by the global exception handler or the caller.
+            throw e;
+        }
+    }
+
+    @Override
+    public DepartmentDTO getDepartmentDetail(long departmentId) {
+        log.info("Execute method get department detail with department id: " + departmentId);
+        // This method retrieves a specific Department entity from the database based on the provided departmentId,
+        // converts it into a DepartmentDTO, and returns the DepartmentDTO as a response.
+
+        try {
+
+            Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
+            // Use the DepartmentRepository's findById() method to retrieve a Department entity based on the provided departmentId.
+            // The findById() method returns an Optional<Department> object,
+            // which may or may not contain a Department entity depending on whether a department with the given ID exists in the database.
+            if(!optionalDepartment.isPresent()){
+                log.info("Department not found with id: " + departmentId);
+                return null;
+            }
+
+            // If the Optional<Department> object contains a Department entity, retrieve it and convert it into a DepartmentDTO.
+            Department department = optionalDepartment.get();
+            DepartmentDTO dto = new DepartmentDTO();
+            dto.setDepartmentId(department.getDepartmentId());
+            dto.setDepartmentName(department.getDepartmentName());
+            dto.setLocation(department.getDepartmentLocation());
+
+            return dto;
+
+        } catch (Exception e) {
+            log.info("Error occurred while fetching department detail: " + e.getMessage());
             throw e;
         }
     }
