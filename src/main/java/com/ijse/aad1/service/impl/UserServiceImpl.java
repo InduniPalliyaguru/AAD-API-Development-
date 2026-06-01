@@ -95,4 +95,86 @@ public class UserServiceImpl implements UserService {
             throw e; // Rethrow the exception to be handled by the caller or global exception handler
         }
     }
+
+    @Override
+    public UserDTO updateUser(UserDTO userDTO) {
+        log.info("Execute method update user with user id: " + userDTO.getUserId());
+
+        try {
+
+            // Retrieve the existing User entity from the database using the userRepository's findById() method, which returns an Optional<User> object
+            Optional<User> optionalUser = userRepository.findById(userDTO.getUserId());
+            if (!optionalUser.isPresent()) {
+                throw new RuntimeException("User not found with id: " + userDTO.getUserId());
+            }
+
+            User user = optionalUser.get();
+            user.setFirstName(userDTO.getFirstName());
+            user.setLastName(userDTO.getLastName());
+            user.setDob(userDTO.getDob());
+            user.setStatus(userDTO.getStatus());
+
+            User savedUser = userRepository.save(user);
+
+            UserDTO dto = new UserDTO();
+            dto.setUserId(savedUser.getUserId());
+            dto.setFirstName(savedUser.getFirstName());
+            dto.setLastName(savedUser.getLastName());
+            dto.setDob(savedUser.getDob());
+            dto.setStatus(savedUser.getStatus());
+
+            return dto; // Return the updated UserDTO object as the response
+
+        } catch (Exception e) {
+            log.error("Error in method updateUser"+ e.getMessage()); // Log the error message if an exception occurs during the execution of the method
+            throw e; // Rethrow the exception to be handled by the caller or global exception handler
+        }
+    }
+
+    @Override
+    public void updateUserStatus(UserDTO userDTO) {
+        log.info("Execute Method updateUserStatus");
+
+        try {
+
+            Optional<User> optionalUser = userRepository.findById(userDTO.getUserId());
+            if(!optionalUser.isPresent()) {
+                throw new RuntimeException("User not found");
+            }
+
+            if (userDTO.getStatus() == null) {
+                throw new RuntimeException("User status not found");
+            }
+
+            User user = optionalUser.get();
+            user.setStatus(userDTO.getStatus());
+
+            userRepository.save(user);
+
+        } catch (Exception e) {
+            log.error("Error update User: " + e.getMessage());
+            throw e;
+        }
+    }
+
+    @Override
+    public void deleteUser(long userId) {
+        log.info("Execute method delete user with user id: " + userId);
+
+        try {
+
+            Optional<User> optionalUser = userRepository.findById(userId);
+            if (!optionalUser.isPresent()) {
+                throw new RuntimeException("User not found with id: " + userId);
+            }
+
+            User user = optionalUser.get();
+            user.setStatus(UserStatus.DELETED); // Set the status of the User entity to DELETED to indicate that the user has been deleted (soft delete)
+            userRepository.save(user);
+
+        } catch (Exception e) {
+            log.error("Error in method deleteUser"+ e.getMessage()); // Log the error message if an exception occurs during the execution of the method
+            throw e; // Rethrow the exception to be handled by the caller or global exception handler
+        }
+    }
 }

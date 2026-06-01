@@ -36,7 +36,23 @@ public class UserController {
     public UserDTO getUserDetails(@PathVariable long userId) { // @PathVariable annotation is used to bind the userId path variable from the URL to the method parameter
         UserDTO userDTO = userService.getUserDetail(userId);
         return userDTO;
+    }
 
+    @PutMapping (produces = MediaType.APPLICATION_JSON_VALUE)// http://localhost:8080/v1/users - PUT request to update an existing user and specify that the response will be in JSON format
+    public UserDTO updateUser(@RequestBody UserDTO userDTO) { // @RequestBody annotation is used to bind the incoming JSON request body to the UserDTO object
+        return userService.updateUser(userDTO);
+    }
+
+    @PatchMapping (produces = MediaType.APPLICATION_JSON_VALUE)
+    public String updateUserStatus(@RequestBody UserDTO userDTO) {
+        userService.updateUserStatus(userDTO);
+        return "User Status Update Successfully";
+    }
+
+    @DeleteMapping (value = "/{userId}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public String deleteUser(@PathVariable long userId) {
+        userService.deleteUser(userId);
+        return "User Deleted Successfully";
     }
 
 }

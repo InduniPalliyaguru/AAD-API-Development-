@@ -106,4 +106,36 @@ public class DepartmentServiceImpl implements DepartmentService {
             throw e;
         }
     }
+
+    @Override
+    public DepartmentDTO updateDepartment(DepartmentDTO departmentDTO) {
+        log.info("Execute method update department with department id: " + departmentDTO.getDepartmentId());
+
+        try {
+
+            Optional<Department> optionalDepartment = departmentRepository.findById(departmentDTO.getDepartmentId());
+
+            if (!optionalDepartment.isPresent()) {
+                log.info("Department not found with id: " + departmentDTO.getDepartmentId());
+                return null;
+            }
+
+            Department department = optionalDepartment.get();
+            department.setDepartmentName(departmentDTO.getDepartmentName());
+            department.setDepartmentLocation(departmentDTO.getLocation());
+
+            Department savedDepartment = departmentRepository.save(department);
+
+            DepartmentDTO dto = new DepartmentDTO();
+            dto.setDepartmentId(savedDepartment.getDepartmentId());
+            dto.setDepartmentName(savedDepartment.getDepartmentName());
+            dto.setLocation(savedDepartment.getDepartmentLocation());
+
+            return dto;
+
+        } catch (Exception e) {
+            log.info("Error occurred while updating department: " + e.getMessage());
+            throw e;
+        }
+    }
 }

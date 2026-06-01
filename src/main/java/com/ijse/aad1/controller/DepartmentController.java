@@ -44,4 +44,9 @@ public class DepartmentController {
         DepartmentDTO departmentDTO = departmentService.getDepartmentDetail(departmentId);
         return departmentDTO;
     }
+
+    @PutMapping (produces = MediaType.APPLICATION_JSON_VALUE)
+    public DepartmentDTO updateDepartment(@RequestBody DepartmentDTO departmentDTO) {
+        return departmentService.updateDepartment(departmentDTO);
+    }
 }

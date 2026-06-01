@@ -11,4 +11,11 @@ public interface UserService {
     List<UserDTO> getUsers();
 
     UserDTO getUserDetail(long userId);
+
+    UserDTO updateUser(UserDTO userDTO);
+
+    void updateUserStatus(UserDTO userDTO);
+
+    void deleteUser(long userId);
+
 }
