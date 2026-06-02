@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data // Lombok annotation to generate getters, setters, toString, equals, and hashCode methods
 @NoArgsConstructor // Lombok annotation to generate a no-argument constructor
@@ -23,6 +24,8 @@ public class User {
     @Enumerated(EnumType.STRING) // Store the enum as a string in the database
     private UserStatus status;
 
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // One-to-many relationship with UserDepartment
+    private List<UserDepartment> userDepartments; // List of UserDepartment entities associated with this user
     // Table -> Class -> Class Annotation -> Entity
     // Column -> Field -> Field Annotation -> Id, GeneratedValue, Enumerated
 

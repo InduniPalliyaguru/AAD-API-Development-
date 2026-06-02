@@ -1,12 +1,11 @@
 package com.ijse.aad1.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,5 +18,8 @@ public class Department {
     private long departmentId;
     private String departmentName;
     private String departmentLocation;
+
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // One-to-many relationship with UserDepartment
+    List<UserDepartment> userDepartments; // List of UserDepartment entities associated with this department
 
 }
