@@ -18,4 +18,6 @@ public interface UserService {
 
     void deleteUser(long userId);
 
+    List<UserDTO> filterUsers(String firstName, String lastName);
+
 }

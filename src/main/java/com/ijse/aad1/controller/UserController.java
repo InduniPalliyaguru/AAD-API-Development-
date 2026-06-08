@@ -55,4 +55,13 @@ public class UserController {
         return "User Deleted Successfully";
     }
 
+    @GetMapping (value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<UserDTO> filterUsers(@RequestParam (value = "firstName", required = false) String firstName,
+                                     @RequestParam (value = "lastName", required = false) String lastName) { // @RequestParam annotation is used to bind the name query parameter from the URL to the method parameter
+        // required - false means that the userName parameter is optional, and the method can be called without providing it. If the parameter is not provided, it will be null.
+
+       return userService.filterUsers(firstName, lastName);
+
+    }
+
 }

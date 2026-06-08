@@ -177,4 +177,29 @@ public class UserServiceImpl implements UserService {
             throw e; // Rethrow the exception to be handled by the caller or global exception handler
         }
     }
+
+    @Override
+    public List<UserDTO> filterUsers(String firstName, String lastName) {
+        log.info("Execute method filter users");
+
+        try {
+
+            List<UserDTO> responseList = new ArrayList<>();
+            List<User> userList = userRepository.filterUsers(firstName, lastName);
+
+            for (User user : userList) {
+                UserDTO userDTO = new UserDTO();
+                userDTO.setUserId(user.getUserId());
+                userDTO.setFirstName(user.getFirstName());
+                userDTO.setLastName(user.getLastName());
+                userDTO.setStatus(user.getStatus());
+                responseList.add(userDTO);
+            }
+            return responseList;
+
+        } catch (Exception e) {
+            log.error("Error in method filterUsers"+ e.getMessage());
+            throw e;
+        }
+    }
 }
