@@ -1,11 +1,15 @@
 package com.ijse.aad1.controller;
 
+import com.ijse.aad1.constant.CommonResponse;
 import com.ijse.aad1.dto.DepartmentDTO;
 import com.ijse.aad1.service.DepartmentService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.ijse.aad1.constant.ResponseMessage.SUCCESS_MESSAGE;
+import static com.ijse.aad1.constant.ResponseStatusCode.OPERATION_SUCCESS;
 
 @RestController
 @RequestMapping(value = "v1/departments") // http://localhost:8080/v1/departments - base URL for department-related endpoints
@@ -20,15 +24,16 @@ public class DepartmentController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     // http://localhost:8080/v1/departments - POST request to create a new department and specify that the response will be in JSON format
-    public DepartmentDTO saveDepartment(@RequestBody DepartmentDTO departmentDTO) {
+    public CommonResponse saveDepartment(@RequestBody DepartmentDTO departmentDTO) {
         // method to handle POST requests to create a new department.
         // It calls the saveDepartment method of the DepartmentService and returns the created DepartmentDTO.
         DepartmentDTO savedDep = departmentService.saveDepartment(departmentDTO);
-        return savedDep;
+
+        // After saving the department, it returns a CommonResponse object with a success status code and a success message.
+        return new CommonResponse(OPERATION_SUCCESS, SUCCESS_MESSAGE);
     }
 
-    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    // http://localhost:8080/v1/departments/all - GET request to retrieve all departments and specify that the response will be in JSON format
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)// http://localhost:8080/v1/departments/all - GET request to retrieve all departments and specify that the response will be in JSON format
     public List<DepartmentDTO> getAllDepartments() {
         // method to handle GET requests to retrieve all departments.
         // It calls the getDepartments method of the DepartmentService and returns a list of DepartmentDTOs.
@@ -51,10 +56,11 @@ public class DepartmentController {
     }
 
     @GetMapping (value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<DepartmentDTO> filterDepartments(@RequestParam(value = "departmentName", required = false) String name,
+    public CommonResponse filterDepartments(@RequestParam(value = "departmentName", required = false) String name, // @RequestParam annotation is used to bind the name query parameter from the URL to the method parameter
                                                  @RequestParam(value = "departmentLocation", required = false) String location) {
+        List<DepartmentDTO> departmentDTOList = departmentService.filterDepartments(name, location);
 
-        return departmentService.filterDepartments(name, location);
-
+        // After filtering the departments based on the provided name and location, it returns a CommonResponse object with a success status code, the list of filtered DepartmentDTOs as the response body, and a success message.
+        return new CommonResponse(OPERATION_SUCCESS, departmentDTOList, SUCCESS_MESSAGE);
     }
 }
